@@ -4,10 +4,9 @@
 
 camera_set_view_size(view, view_width, view_height)
 
-with (obj_player) {
-	
-	// Only follow the local player.
-	if obj_client.player_id == player_id {
+
+if target != noone and target != undefined {
+	with (target) {
 		var _buff = other.buff
 		var _vw = other.view_width
 		var _vh = other.view_height

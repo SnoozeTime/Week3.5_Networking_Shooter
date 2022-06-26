@@ -1,34 +1,29 @@
-/// @description Create the player
+/// @description Insert description here
+// You can write your code in this editor
 
-// Server ID for the player
-player_id = -1
-rb = ringbuffer_create()
-
-IsLocal = function() {
-	return player_id == obj_client.player_id
-}
-
-player_ts = 0
-serverX = x
-serverY = y
-
-state[0] = 0 
-state[1] = 0
-state[2] = 0
-state[3] = 0
+net_entity_id = -1
 
 // Only when not network master
 first_ts = 0
 current_interpolated_ts = 0
-
-// This is to display the correct animation
-prev_x = x
-
 state_received = 0
-debug_txt = ""
+
+
+is_local = function() {
+	return net_entity_id == obj_client.player_id
+}
+
+
+post_create = function(_net_entity_id, _x, _y) {
+	log("Create with " + string(_net_entity_id))
+	net_entity_id = _net_entity_id
+	rb = ringbuffer_create()
+	x = _x
+	y = _y
+}
+
 
 ApplyServerPos = function(_ts, _x, _y) {
-
 
 	/*
 		Quite important :D
@@ -36,7 +31,8 @@ ApplyServerPos = function(_ts, _x, _y) {
 		Whenever we receive an update from the server, reapply all inputs from this update to get the current 
 		player position
 	*/
-	if is_network_master(player_id) {
+	if is_local() {
+		log("Local applyserverpos")
 		var _rb_idx = ringbuffer_find(rb, _ts)
 		if _rb_idx >= 0 {
 			var _idx = (_rb_idx + 1) % max_buffer_size
@@ -45,8 +41,10 @@ ApplyServerPos = function(_ts, _x, _y) {
 				y = _y
 				while true {
 					var _input = rb.buffer[_idx][rb_input_idx]
-					x += vel*(_input[1] - _input[0])
-					y += vel*(_input[3] - _input[2])
+					
+					// Need to set that in the children class
+					apply_simulation(_input)
+					
 					rb.buffer[_idx][rb_state_idx] = [x, y]
 				
 					_idx = (_idx + 1) % max_buffer_size
@@ -71,8 +69,6 @@ ApplyServerPos = function(_ts, _x, _y) {
 		} else if state_received == 1 {
 			current_interpolated_ts = first_ts
 			state_received += 1
-			log(string_interpolate("Received states at {} and {}. Will set ts to {}", [first_ts, _ts, first_ts]))
-			log(rb.ToString())
 		}
 	}
 }

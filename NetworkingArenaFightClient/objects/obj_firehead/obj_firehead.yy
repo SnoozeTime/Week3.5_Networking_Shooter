@@ -1,0 +1,43 @@
+{
+  "spriteId": {
+    "name": "spr_firehead_run",
+    "path": "sprites/spr_firehead_run/spr_firehead_run.yy",
+  },
+  "solid": false,
+  "visible": true,
+  "managed": true,
+  "spriteMaskId": null,
+  "persistent": false,
+  "parentObjectId": {
+    "name": "obj_par_player",
+    "path": "objects/obj_par_player/obj_par_player.yy",
+  },
+  "physicsObject": false,
+  "physicsSensor": false,
+  "physicsShape": 1,
+  "physicsGroup": 1,
+  "physicsDensity": 0.5,
+  "physicsRestitution": 0.1,
+  "physicsLinearDamping": 0.1,
+  "physicsAngularDamping": 0.1,
+  "physicsFriction": 0.2,
+  "physicsStartAwake": true,
+  "physicsKinematic": false,
+  "physicsShapePoints": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
+  "properties": [],
+  "overriddenProperties": [
+    {"propertyId":{"name":"idle_anim","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"spr_firehead_idle","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+    {"propertyId":{"name":"run_anim","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"spr_firehead_run","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+  ],
+  "parent": {
+    "name": "Characters",
+    "path": "folders/Objects/Characters.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "obj_firehead",
+  "tags": [],
+  "resourceType": "GMObject",
+}

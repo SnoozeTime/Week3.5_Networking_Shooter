@@ -27,10 +27,15 @@ function send_input(_ts, _input) {
 		buffer_write(send_buffer, buffer_u8, network.input)
 		buffer_write(send_buffer, buffer_u32, _ts)
 		buffer_write(send_buffer, buffer_u8, player_id)
-		buffer_write(send_buffer, buffer_u8, _input[0]) // left
-		buffer_write(send_buffer, buffer_u8, _input[1]) // right
-		buffer_write(send_buffer, buffer_u8, _input[2]) // right
-		buffer_write(send_buffer, buffer_u8, _input[3]) // right
+		
+		//https://manual.yoyogames.com/Additional_Information/Bitwise_Operators.htm
+		// Just one u8 to store all input.
+		var _input_bits = 0
+		for (var _i = 0; _i < array_length(_input); _i++) {	
+			_input_bits += _input[_i] << _i
+		}
+		
+		buffer_write(send_buffer, buffer_u8, _input_bits)
 		send_to_server()
 	}
 }

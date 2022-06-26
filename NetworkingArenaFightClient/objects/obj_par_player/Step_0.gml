@@ -1,4 +1,5 @@
 /// @description Movement
+event_inherited()
 
 /* Player movement; If local player, then send the state to the server
    and move to where the player is supposed to be. It is in "current time"
@@ -9,7 +10,7 @@
 
 */
 #region Player movement (local and online)
-if IsLocal() {
+if is_local() {
 	player_ts += 1
 
 	// Capture and send input
@@ -17,6 +18,7 @@ if IsLocal() {
 	state[1] = keyboard_check(vk_right)
 	state[2] = keyboard_check(vk_up)
 	state[3] = keyboard_check(vk_down)
+	state[4] = mouse_check_button(mb_left)
 
 	send_input(player_ts, state)
 	
@@ -28,56 +30,46 @@ if IsLocal() {
 	y += vel*(state[3] - state[2])
 
 	// Add to state buffer
-	var _input_copy = array_create(4)
-	array_copy(_input_copy, 0, state, 0, 4)
+	var _input_copy = array_create(array_length(state))
+	array_copy(_input_copy, 0, state, 0, array_length(state))
 	ringbuffer_push(rb, player_ts, _input_copy, [x, y])
-} else {
-	
-	var _rb_idx = ringbuffer_find(rb, current_interpolated_ts)
-	
-	if _rb_idx >= 0 {
-		
-		// Let's try next state to interpolate
-		if _rb_idx != rb.buffer_end {
-			var _idx = _rb_idx - 1
-			// case where _rb_idx = 0
-			if _idx < 0 {
-				_idx = max_buffer_size-1
-			}
-			
-			if rb.buffer[_idx] != noone {
-				var _initialState = rb.buffer[_idx][rb_state_idx]
-				var _final_state = rb.buffer[_rb_idx][rb_state_idx]
-				var _end_ts =  rb.buffer[_rb_idx][rb_ts_idx]
-				var _start_ts =  rb.buffer[_idx][rb_ts_idx]
-			
-				// now interpolate.
-				var l = (current_interpolated_ts - _start_ts) / real(_end_ts - _start_ts)
-				x = l * (_final_state[0] - _initialState[0]) +  _initialState[0]
-				y = l * (_final_state[1] - _initialState[1]) +  _initialState[1]
-
-			}
-		}
-		
-	} 
-	
-	if state_received == 2 {
-		current_interpolated_ts += 1
-	}
 }
 #endregion
+
+// Shooting
+if is_local() {
+	
+	if prev_mouse_state != state[4] {
+		is_mouse_clicked = state[4] == 1		
+		is_mouse_released = state[4] == 0		
+	} else {
+		is_mouse_clicked = false	
+		is_mouse_released = false	
+	}
+	
+	prev_mouse_state = state[4]
+	
+}
 
 
 // Check direction of player and update sprite
 #region Animation
 
+// looking left or right?
 if x > prev_x {
 	// going to the left
 	image_xscale = 1
 } else if x < prev_x {
 	image_xscale = -1
 }
+var _moving =  y != prev_y or x != prev_x
+if _moving {
+	sprite_index = run_anim
+} else {
+	sprite_index = idle_anim
+}
 
 prev_x = x
+prev_y = y
 
 #endregion

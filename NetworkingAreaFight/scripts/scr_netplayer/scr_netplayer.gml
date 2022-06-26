@@ -86,10 +86,11 @@ function received_packet(_ip_addr, _port, _buffer){
 						// parsing left/right/...
 						
 						// Only apply the input if the time from the message is > from the last client time
-						var _left = buffer_read(_buffer, buffer_u8)
-						var _right = buffer_read(_buffer, buffer_u8)
-						var _top = buffer_read(_buffer, buffer_u8)
-						var _bottom = buffer_read(_buffer, buffer_u8)
+						var _input_bits = buffer_read(_buffer, buffer_u8)
+						var _left = (_input_bits & 1) != 0
+						var _right = (_input_bits & (1 << 1)) != 0
+						var _top = (_input_bits & (1 << 2)) != 0
+						var _bottom =  (_input_bits & (1 << 3)) != 0
 						if _ts >= _c.player_instance.last_client_time {
 							_c.player_instance.add_input(_ts, [_left, _right, _top, _bottom])
 							_c.player_instance.last_client_time = _ts

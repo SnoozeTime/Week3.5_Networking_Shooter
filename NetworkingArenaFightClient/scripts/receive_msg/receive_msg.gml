@@ -37,19 +37,22 @@ function receive_message(_buffer){
 						
 					// Update x and y
 					// TODO create map or array later
-					with obj_player {
-						if player_id == _pid {
+					with obj_par_player {
+						if net_entity_id == _pid {
 							ApplyServerPos(_ts, _x, _y)
 							_found = true
 						}
 					}
 						
 					if not _found {
-						var p = instance_create_layer(200, 200, "Instances", obj_player)
+						var p = instance_create_layer(200, 200, "Instances", obj_firehead)
 						with p {
-							player_id = _pid
-							serverX = _x
-							serverY = _y
+							post_create(_pid, _x, _y)
+						}
+						if p.is_local() {
+							with obj_camera {
+								target = p
+							}
 						}
 					}
 					
