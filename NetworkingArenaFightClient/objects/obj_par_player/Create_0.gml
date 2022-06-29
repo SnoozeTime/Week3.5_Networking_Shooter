@@ -1,6 +1,16 @@
 /// @description Create the player
 event_inherited()
 
+enum player_state {
+	idle,
+	running,
+	hurt,
+	dead
+}
+my_state = player_state.idle
+anim_array[player_state.idle] = idle_anim
+anim_array[player_state.hurt] = hurt_anim
+anim_array[player_state.running] = run_anim
 player_ts = 0
 
 // 0 to 3 is direction

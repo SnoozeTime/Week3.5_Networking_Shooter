@@ -10,6 +10,7 @@
     {"id":{"name":"obj_tree","path":"objects/obj_tree/obj_tree.yy",},"order":1,},
     {"id":{"name":"hole","path":"sprites/hole/hole.yy",},"order":1,},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":2,},
+    {"id":{"name":"obj_par_projectile","path":"objects/obj_par_projectile/obj_par_projectile.yy",},"order":1,},
     {"id":{"name":"spr_firehead_run","path":"sprites/spr_firehead_run/spr_firehead_run.yy",},"order":2,},
     {"id":{"name":"libxprocess","path":"extensions/libxprocess/libxprocess.yy",},"order":0,},
     {"id":{"name":"network_utilities","path":"scripts/network_utilities/network_utilities.yy",},"order":3,},

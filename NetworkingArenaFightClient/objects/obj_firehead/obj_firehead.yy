@@ -32,6 +32,7 @@
   "overriddenProperties": [
     {"propertyId":{"name":"idle_anim","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"spr_firehead_idle","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
     {"propertyId":{"name":"run_anim","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"spr_firehead_run","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+    {"propertyId":{"name":"hurt_anim","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"spr_firehead_hurt","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
   ],
   "parent": {
     "name": "Characters",

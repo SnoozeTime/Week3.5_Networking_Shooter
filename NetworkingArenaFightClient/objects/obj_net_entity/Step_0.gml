@@ -24,11 +24,13 @@ if not is_local() {
 			
 				// now interpolate.
 				var l = (current_interpolated_ts - _start_ts) / real(_end_ts - _start_ts)
-				x = l * (_final_state[0] - _initialState[0]) +  _initialState[0]
-				y = l * (_final_state[1] - _initialState[1]) +  _initialState[1]
 
-				look_at[0] = _initialState[2]
-				look_at[1] = _initialState[3]
+				x = lerp( _initialState[0], _final_state[0], l)
+				y = lerp( _initialState[1], _final_state[1], l)
+				// not perfect, would be better to interpolate angle...
+				look_at[0] = lerp( _initialState[2], _final_state[2], l)
+				look_at[1] = lerp( _initialState[3], _final_state[3], l)
+				
 			}
 		}
 		
@@ -39,7 +41,6 @@ if not is_local() {
 	if _action_idx >= 0 {
 		var _shoot_dir = action_rb.buffer[_action_idx][rb_state_idx]
 		primary_action(_shoot_dir[0], _shoot_dir[1])
-		//instance_create_layer(x, y, layer, obj_fireball, {dir_x: _shoot_dir[0], dir_y: _shoot_dir[1]})
 	}
 	
 	if state_received == 2 {

@@ -58,6 +58,19 @@ if is_local() {
 	}
 }
 
+
+// Check if collision with projectile.
+with obj_par_projectile {
+	if my_parent != noone {
+		if place_meeting(x, y, other) and my_parent != other.net_entity_id {
+			instance_destroy()
+			// burp
+			other.my_state = player_state.hurt
+			other.image_index = 0
+		}
+	}
+}
+
 // Check direction of player and update sprite
 #region Animation
 
@@ -69,13 +82,18 @@ if x > prev_x {
 	image_xscale = -1
 }
 var _moving =  y != prev_y or x != prev_x
-if _moving {
-	sprite_index = run_anim
-} else {
-	sprite_index = idle_anim
+
+if my_state != player_state.hurt {
+	if _moving {
+		my_state = player_state.running
+	} else {
+		my_state = player_state.idle
+	}
 }
+
 
 prev_x = x
 prev_y = y
 
+sprite_index = anim_array[my_state]
 #endregion

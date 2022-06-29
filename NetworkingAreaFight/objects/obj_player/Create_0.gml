@@ -49,14 +49,24 @@ player_step = function() {
 			
 			// Cannot shoot too fast.
 			if is_mouse_clicked and not _has_shot {
-				
 				var _x = mouse_dir[0] - x
 				var _y = mouse_dir[1] - (y-8)
 				var b = instance_create_depth(x, y, layer, obj_par_projectile, { dir_x: _x, dir_y: _y } )
+				b.my_parent = self
 				_shot_dir = b.dir
 				_shoot_at = _fromClient[0]	
 				// at what time?
 				_has_shot = true
+			}
+			
+			
+			// bullet collision
+			
+			// Check if collision with projectile.
+			with obj_par_projectile {
+				if place_meeting(x, y, other) and my_parent != other  {
+					instance_destroy()	
+				}
 			}
 		}
 		

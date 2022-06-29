@@ -76,7 +76,6 @@ function receive_message(_buffer){
 				var _ev = new ShootEvent()
 				_ev.Unpack(_buffer)
 				var _pid = _ev.pid
-				log("GOT SHOOT EVENT FROM " + _ev.ToString())
 				with obj_par_player {
 					if net_entity_id == _pid {
 						ApplyAction(_ev.ts, _ev.dir[0], _ev.dir[1])

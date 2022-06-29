@@ -33,7 +33,6 @@ ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 		player position
 	*/
 	if is_local() {
-		log("Local applyserverpos")
 		var _rb_idx = ringbuffer_find(rb, _ts)
 		if _rb_idx >= 0 {
 			var _idx = (_rb_idx + 1) % max_buffer_size

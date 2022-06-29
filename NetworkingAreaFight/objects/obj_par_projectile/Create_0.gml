@@ -12,3 +12,4 @@ if dir_x != 0 or dir_y != 0 {
 
 // Velocity of the projectile
 vel = 5
+my_parent = noone

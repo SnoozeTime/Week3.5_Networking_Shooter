@@ -7,7 +7,6 @@ my_fireball.my_player = self
 
 
 after_local_movement = function() {
-	
 	adjust_fireball_pos(mouse_x, mouse_y)
 }
 
@@ -36,5 +35,8 @@ on_click = function() {
 
 
 primary_action = function(_x, _y) {
-	instance_create_layer(my_fireball.x, my_fireball.y, layer, obj_fireball, {dir_x: _x, dir_y: _y})
+	var _bullet = instance_create_layer(my_fireball.x, my_fireball.y, layer, obj_fireball, {dir_x: _x, dir_y: _y})
+	with _bullet {
+		init(other.net_entity_id)
+	}
 }
