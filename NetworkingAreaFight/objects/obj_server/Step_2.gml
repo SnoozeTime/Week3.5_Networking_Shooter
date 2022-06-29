@@ -1,3 +1,2 @@
-/// @description Server loop - Done after updating positions
-
+/// @description Server time
 server_time += 1

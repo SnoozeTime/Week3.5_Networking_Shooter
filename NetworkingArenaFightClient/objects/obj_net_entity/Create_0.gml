@@ -7,7 +7,7 @@ net_entity_id = -1
 first_ts = 0
 current_interpolated_ts = 0
 state_received = 0
-
+look_at = [1, 0]
 
 is_local = function() {
 	return net_entity_id == obj_client.player_id
@@ -18,12 +18,13 @@ post_create = function(_net_entity_id, _x, _y) {
 	log("Create with " + string(_net_entity_id))
 	net_entity_id = _net_entity_id
 	rb = ringbuffer_create()
+	action_rb = ringbuffer_create()
 	x = _x
 	y = _y
 }
 
 
-ApplyServerPos = function(_ts, _x, _y) {
+ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 
 	/*
 		Quite important :D
@@ -61,7 +62,7 @@ ApplyServerPos = function(_ts, _x, _y) {
 			Interpolate between previous received position and new received position so that movement is not choppy
 			Keep a list of last known positions.
 		*/
-		ringbuffer_push(rb, _ts, [], [_x, _y])
+		ringbuffer_push(rb, _ts, [], [_x, _y, _mouse_x, _mouse_y])
 		
 		if state_received < 1 {
 			state_received += 1	
@@ -72,3 +73,13 @@ ApplyServerPos = function(_ts, _x, _y) {
 		}
 	}
 }
+
+ApplyAction = function(_ts, _x, _y) {
+	ringbuffer_push(action_rb, _ts, [], [_x, _y])
+}
+
+
+// CALLBACKS
+after_local_movement = function() {}
+after_remote_movement = function() {}
+primary_action = function() {}

@@ -57,6 +57,30 @@ function ringbuffer_find(_buffer, _ts) {
 	return -1
 }
 
+function ringbuffer_findexact(_buffer, _ts) {
+	
+	var _i = _buffer.buffer_start
+	
+	while true {
+	
+		if _buffer.buffer[_i] != noone and 	_buffer.buffer[_i][rb_ts_idx] == _ts {
+			return _i
+		}
+		
+		_i += 1
+		
+		if _i == max_buffer_size {
+			_i = 0
+		}
+		
+		if _i == _buffer.buffer_end {
+			break	
+		}
+	}
+	
+	return -1
+}
+
 function RingBuffer() constructor {
 	buffer_start = 0
 	buffer_end = 0

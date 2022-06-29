@@ -15,6 +15,10 @@ enum network {
 	state,
 	// Input: From player to server
 	input,
+	// I shoot
+	player_shoot,
+	// other player shoot
+	shoot_event,
 }
 
 

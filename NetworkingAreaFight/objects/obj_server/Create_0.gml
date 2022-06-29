@@ -15,6 +15,10 @@ enum network {
 	state,
 	// Input: From player to server
 	input,
+	// I shoot
+	player_shoot,
+	// other player shoot
+	shoot_event,
 }
 
 server_time = 0
@@ -42,3 +46,12 @@ all_clients = array_create(max_clients, new Client("", 0))
 
 alarm[0] = server_framerate
 alarm[1] = cleanup_framerate
+
+next_entity_id = 0
+get_next_entity_id = function() {
+	next_entity_id = next_entity_id + 1
+	if next_entity_id == 65536 {
+		next_entity_id = 0	
+	}
+	return next_entity_id
+}

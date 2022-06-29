@@ -33,6 +33,10 @@ if is_local() {
 	var _input_copy = array_create(array_length(state))
 	array_copy(_input_copy, 0, state, 0, array_length(state))
 	ringbuffer_push(rb, player_ts, _input_copy, [x, y])
+	
+	
+	// Callback for character specific action
+	after_local_movement()
 }
 #endregion
 
@@ -49,8 +53,10 @@ if is_local() {
 	
 	prev_mouse_state = state[4]
 	
+	if is_mouse_clicked {
+		on_click()
+	}
 }
-
 
 // Check direction of player and update sprite
 #region Animation

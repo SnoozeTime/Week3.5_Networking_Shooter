@@ -2,8 +2,10 @@
   "resources": [
     {"id":{"name":"src_messages","path":"scripts/src_messages/src_messages.yy",},"order":0,},
     {"id":{"name":"receive_msg","path":"scripts/receive_msg/receive_msg.yy",},"order":2,},
+    {"id":{"name":"obj_firehead_hand","path":"objects/obj_firehead_hand/obj_firehead_hand.yy",},"order":2,},
     {"id":{"name":"spr_house","path":"sprites/spr_house/spr_house.yy",},"order":3,},
     {"id":{"name":"spr_bush","path":"sprites/spr_bush/spr_bush.yy",},"order":2,},
+    {"id":{"name":"spr_fireball","path":"sprites/spr_fireball/spr_fireball.yy",},"order":5,},
     {"id":{"name":"obj_bush","path":"objects/obj_bush/obj_bush.yy",},"order":2,},
     {"id":{"name":"obj_tree","path":"objects/obj_tree/obj_tree.yy",},"order":1,},
     {"id":{"name":"hole","path":"sprites/hole/hole.yy",},"order":1,},
@@ -21,6 +23,7 @@
     {"id":{"name":"obj_net_entity","path":"objects/obj_net_entity/obj_net_entity.yy",},"order":0,},
     {"id":{"name":"obj_par_item","path":"objects/obj_par_item/obj_par_item.yy",},"order":0,},
     {"id":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"order":0,},
+    {"id":{"name":"obj_fireball","path":"objects/obj_fireball/obj_fireball.yy",},"order":0,},
     {"id":{"name":"ring_buffer","path":"scripts/ring_buffer/ring_buffer.yy",},"order":0,},
     {"id":{"name":"obj_firehead","path":"objects/obj_firehead/obj_firehead.yy",},"order":1,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
@@ -68,6 +71,7 @@
     {"folderPath":"folders/Sprites/Characters.yy","order":6,"resourceVersion":"1.0","name":"Characters","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects/Characters.yy","order":6,"resourceVersion":"1.0","name":"Characters","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects/network.yy","order":7,"resourceVersion":"1.0","name":"network","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Objects/Characters/weapons.yy","order":3,"resourceVersion":"1.0","name":"weapons","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},

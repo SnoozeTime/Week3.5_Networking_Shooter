@@ -4,6 +4,7 @@
 for (var _i=0; _i < max_clients; _i++) {
 	var _c = all_clients[_i]	
 	if _c.IsValid() {
+		log(string_interpolate("Last {} vs timeout {}", [_c.last_server_time-server_time, client_timeout]))
 		if abs(_c.last_server_time-server_time) > client_timeout {
 			log("TIMEOUT:"+_c.ToString())
 			log(string(_c.last_server_time)+ "-" + string(server_time) + " > " + string(client_timeout))

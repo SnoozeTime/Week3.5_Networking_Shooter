@@ -84,6 +84,7 @@ function received_packet(_ip_addr, _port, _buffer){
 					if _input_msg.ts >= _c.player_instance.last_client_time {
 						_c.player_instance.add_input(_input_msg.ts, _input_msg.input)
 						_c.player_instance.last_client_time = _input_msg.ts
+						
 					}
 					
 				}
@@ -146,12 +147,36 @@ function send_all(_msg) {
 	}
 }
 
+function send_all_but(_msg, _pid) {
+	with obj_server {
+		for (var _i=0; _i < max_clients; _i++) {
+			if _pid == _i {
+				continue
+			}
+			var _c = all_clients[_i]
+			if _c.IsValid() {
+				net_pack_message(server_buffer, _msg, _c)
+				log(buffer_prettyprint(server_buffer))
+				network_send_udp(server_socket, _c.addr, _c.port, server_buffer, buffer_tell(server_buffer))	
+			}
+		}
+	}
+}
+
 function send_state(_player) {
 	with obj_server {
 		var _msg = new ClientState(_player)	
 		send_all(_msg)
 	}
 	
+}
+
+function send_shoot_event(_player, _shoot_at, _shot_dir) {
+	log("Will send shoot event")
+	with obj_server {
+		var _msg = new ShootEvent(0, _player.player_id, _shoot_at, _shot_dir)
+		send_all_but(_msg, _player.player_id)
+	}
 }
 
 function Client(_addr, _port) constructor

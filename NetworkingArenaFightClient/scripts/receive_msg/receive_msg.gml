@@ -39,6 +39,8 @@ function receive_message(_buffer){
 				var _ts = buffer_read(_buffer, buffer_u32)
 				var _x = buffer_read(_buffer, buffer_u16)	
 				var _y = buffer_read(_buffer, buffer_u16)
+				var mouse_dir_x = buffer_read(_buffer, buffer_u16)
+				var mouse_dir_y = buffer_read(_buffer, buffer_u16)
 				
 				if _pid >= 0 {
 					var _found = false
@@ -47,7 +49,7 @@ function receive_message(_buffer){
 					// TODO create map or array later
 					with obj_par_player {
 						if net_entity_id == _pid {
-							ApplyServerPos(_ts, _x, _y)
+							ApplyServerPos(_ts, _x, _y, mouse_dir_x, mouse_dir_y)
 							_found = true
 						}
 					}
@@ -70,6 +72,18 @@ function receive_message(_buffer){
 			break
 			#endregion
 			
+			case network.shoot_event:
+				var _ev = new ShootEvent()
+				_ev.Unpack(_buffer)
+				var _pid = _ev.pid
+				log("GOT SHOOT EVENT FROM " + _ev.ToString())
+				with obj_par_player {
+					if net_entity_id == _pid {
+						ApplyAction(_ev.ts, _ev.dir[0], _ev.dir[1])
+					}
+				}
+				
+			break
 		}
 	}
 }

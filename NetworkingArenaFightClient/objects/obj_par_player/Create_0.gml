@@ -28,3 +28,6 @@ apply_simulation = function(_input) {
 	x += vel*(_input[1] - _input[0])
 	y += vel*(_input[3] - _input[2])
 }
+
+// CALLBACKS
+on_click = function() {}

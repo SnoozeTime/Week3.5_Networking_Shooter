@@ -63,11 +63,12 @@ function send_heartbeat() {
 	}
 }
 
-function Input(_client_id, _ts, _input) constructor
+function Input(_client_id, _ts, _input, _look_at) constructor
 {
 	client_id = _client_id
 	ts = _ts
 	input = _input
+	look_at = _look_at
 	
 	static Pack = function(_buf) {
 		buffer_write(_buf, buffer_u32, ts)
@@ -78,6 +79,9 @@ function Input(_client_id, _ts, _input) constructor
 		}
 		
 		buffer_write(_buf, buffer_u8, _input_bits)
+		// mouse
+		buffer_write(_buf, buffer_u16, look_at[0])
+		buffer_write(_buf, buffer_u16, look_at[1])
 	}
 	
 	static MessageId = function() {
@@ -95,7 +99,7 @@ function Input(_client_id, _ts, _input) constructor
 */ 
 function send_input(_ts, _input) {
 	with obj_client {
-		var _msg = new Input(player_id, _ts, _input)
+		var _msg = new Input(player_id, _ts, _input, [mouse_x, mouse_y])
 		send_to_server(_msg)
 	}
 }
@@ -104,5 +108,40 @@ function send_to_server(_msg) {
 	with obj_client {
 		net_pack_message(_msg)
 		network_send_udp(client_socket, server_addr, port, send_buffer, buffer_tell(send_buffer))
+	}
+}
+
+
+function ShootEvent(_shoot_id = 0, _pid = 0, _ts = 0, _dir = []) constructor 
+{
+	shoot_id = _shoot_id
+	pid = _pid // who shot
+	ts = _ts
+	dir = _dir
+	
+	static Pack = function(_buf) {
+		buffer_write(_buf, buffer_u8, shoot_id)
+		buffer_write(_buf, buffer_u8, pid)
+		buffer_write(_buf, buffer_u32, ts)
+		buffer_write(_buf, buffer_f16, dir[0])
+		buffer_write(_buf, buffer_f16, dir[1])
+	}
+	
+	static Unpack = function(_buf) {
+		shoot_id = buffer_read(_buf, buffer_u8)
+		pid = buffer_read(_buf, buffer_u8)
+		ts = buffer_read(_buf, buffer_u32)	
+		var _x = buffer_read(_buf, buffer_f16)
+		var _y = buffer_read(_buf, buffer_f16)
+		dir = [_x, _y]
+		log("Unpacked " + string(dir))
+	}
+	
+	static MessageId = function() {
+		return network.shoot_event	
+	}
+	
+	static ToString = function() {
+		return "Player" + string(pid) + "Shoot at dir=" + string(dir) + " and ts=" + string(ts)
 	}
 }

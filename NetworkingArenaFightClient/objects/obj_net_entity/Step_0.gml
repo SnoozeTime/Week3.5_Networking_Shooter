@@ -6,6 +6,8 @@ if not is_local() {
 	
 	if _rb_idx >= 0 {
 		
+		
+		
 		// Let's try next state to interpolate
 		if _rb_idx != rb.buffer_end {
 			var _idx = _rb_idx - 1
@@ -25,12 +27,24 @@ if not is_local() {
 				x = l * (_final_state[0] - _initialState[0]) +  _initialState[0]
 				y = l * (_final_state[1] - _initialState[1]) +  _initialState[1]
 
+				look_at[0] = _initialState[2]
+				look_at[1] = _initialState[3]
 			}
 		}
 		
-	} 
+	}
+	
+	// Let's see if can find action.
+	var _action_idx = ringbuffer_findexact(action_rb, current_interpolated_ts)
+	if _action_idx >= 0 {
+		var _shoot_dir = action_rb.buffer[_action_idx][rb_state_idx]
+		primary_action(_shoot_dir[0], _shoot_dir[1])
+		//instance_create_layer(x, y, layer, obj_fireball, {dir_x: _shoot_dir[0], dir_y: _shoot_dir[1]})
+	}
 	
 	if state_received == 2 {
 		current_interpolated_ts += 1
 	}
+	
+	after_remote_movement()
 }
