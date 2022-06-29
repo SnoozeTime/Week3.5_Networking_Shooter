@@ -3,6 +3,14 @@
 function receive_message(_buffer){
 	with obj_client {
 		var msg_type = buffer_read(_buffer, buffer_u8)
+		var _seq_nb = buffer_read(_buffer, buffer_u16)
+		
+		if not net_seq_greater_than(_seq_nb, remote_seq_nb) {
+			log("Received packet out of order. Discarding")
+			return	
+		}
+		remote_seq_nb = _seq_nb
+		
 		switch msg_type {
 			
 			#region Connect Ack

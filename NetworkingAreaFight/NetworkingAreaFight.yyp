@@ -1,9 +1,10 @@
 {
   "resources": [
     {"id":{"name":"scr_utilities","path":"scripts/scr_utilities/scr_utilities.yy",},"order":0,},
-    {"id":{"name":"macros_msg_types","path":"scripts/macros_msg_types/macros_msg_types.yy",},"order":1,},
+    {"id":{"name":"src_messages","path":"scripts/src_messages/src_messages.yy",},"order":1,},
     {"id":{"name":"obj_server","path":"objects/obj_server/obj_server.yy",},"order":0,},
     {"id":{"name":"spr_white","path":"sprites/spr_white/spr_white.yy",},"order":0,},
+    {"id":{"name":"src_network_utilities","path":"scripts/src_network_utilities/src_network_utilities.yy",},"order":2,},
     {"id":{"name":"scr_netplayer","path":"scripts/scr_netplayer/scr_netplayer.yy",},"order":0,},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},"order":1,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},

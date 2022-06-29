@@ -34,11 +34,12 @@ server_addr = "127.0.0.1"
 client_socket = network_create_socket(network_socket_udp)
 send_buffer = buffer_create(1024, buffer_fixed, 1)
 
-
+local_seq_nb = 0
+remote_seq_nb = -1
 
 // Handling the connection
 var _connect_to_server = function() {
-	connect_to_server(client_socket, server_addr, port, send_buffer)	
+	connect_to_server()	
 }
 connect_timesource = time_source_create(time_source_game, 1, time_source_units_seconds, _connect_to_server, [], -1, time_source_expire_after)
 

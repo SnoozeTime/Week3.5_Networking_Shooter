@@ -30,5 +30,5 @@ player_step = function() {
 	reset_input()
 
 	// Send position to client
-	send_state(player_id, last_client_time, x, y)
+	send_state(self)
 }

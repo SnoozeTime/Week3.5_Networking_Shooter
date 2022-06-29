@@ -6,7 +6,7 @@
     "path": "folders/Scripts/network.yy",
   },
   "resourceVersion": "1.0",
-  "name": "create_msg",
+  "name": "src_messages",
   "tags": [],
   "resourceType": "GMScript",
 }

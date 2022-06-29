@@ -1,1 +1,0 @@
-#macro MSG_TYPE_CONNECT 1
