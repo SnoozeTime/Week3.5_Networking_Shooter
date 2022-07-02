@@ -44,25 +44,25 @@ local_seq_nb = 0
 remote_seq_nb = -1
 ackfield = ackfield_create()
 
+#region Connection
+connect_countdown = 3
+var _countdown_to_connect = function() {
+	connect_countdown -= 1
+	if connect_countdown == 0 {
+		time_source_start(connect_timesource)
+	}
+}
+before_connect_ts = time_source_create(time_source_game, 1, time_source_units_seconds, _countdown_to_connect, [], 3, time_source_expire_after)
+time_source_start(before_connect_ts)
+
+
 // Handling the connection
 var _connect_to_server = function() {
 	connect_to_server(global.player_name)	
 }
 connect_timesource = time_source_create(time_source_game, 1, time_source_units_seconds, _connect_to_server, [], -1, time_source_expire_after)
 
-// I am alive.
-var _send_heartbeat = function() {
-	send_heartbeat()
-}
-heartbeat_period = 0.5
-heartbeat_timesource = time_source_create(time_source_game, heartbeat_period, time_source_units_seconds, _send_heartbeat, [], -1, time_source_expire_after)
+#endregion
 
 // Names and pings
 players_information = []
-
-// STAAAART
-if myState == ClientState.not_connected {
-	myState = ClientState.connecting
-	log("Will connect to server")
-	time_source_start(connect_timesource)
-}

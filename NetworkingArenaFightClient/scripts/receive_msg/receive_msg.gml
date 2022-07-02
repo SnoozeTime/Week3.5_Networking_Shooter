@@ -23,6 +23,9 @@ function receive_message(_buffer){
 				myState = ClientState.connected
 				// Stop the connect timesource to stop connection attempts
 				time_source_stop(connect_timesource)
+				with obj_HUD {
+					my_state = HudState.Playing	
+				}
 				log("Connected to server with player ID " + string(player_id))
 				
 				// Create the player.
