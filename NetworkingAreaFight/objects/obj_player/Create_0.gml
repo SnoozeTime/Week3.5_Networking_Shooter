@@ -47,6 +47,10 @@ player_step = function() {
 	
 			prev_mouse_state = _input[4]
 			
+			if player_id == 1 {
+				log(string_interpolate("Apply input at  {} (last ts ={})", [_fromClient[0], last_client_time]))
+			}
+			
 			// Cannot shoot too fast.
 			if is_mouse_clicked and not _has_shot {
 				var _x = mouse_dir[0] - x
@@ -76,6 +80,10 @@ player_step = function() {
 	reset_input()
 
 	// Send position to client
+	if player_id == 1 {
+		log(string_interpolate("Will send state at {}", [last_client_time]))
+	}
+	
 	send_state(self)
 	
 	if _has_shot {

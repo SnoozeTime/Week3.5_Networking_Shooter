@@ -8,6 +8,23 @@ function net_pack_message(_buf, _msg, _client) {
 	_client.local_seq_nb = (_client.local_seq_nb+1) %  65535
 }
 
+
+function Connect(_player_name="") constructor 
+{
+	player_name = _player_name	
+	static Pack = function(_buf) {
+		buffer_write(_buf, buffer_string, player_name)
+	}
+	
+	static Unpack = function(_buf) {
+		player_name = buffer_read(_buf, buffer_string)
+	}
+	
+	static MessageId = function() {
+		return network.connect	
+	}
+}
+
 /*
 	Just acknowledge that client is connected to server.
 */
@@ -125,6 +142,10 @@ function Input(_client_id=0, _ts=0, _input=noone, _look_at = noone) constructor
 	static Size = function() {
 		return 6
 	}
+	
+	static ToString = function() {
+		return string_interpolate("[ClientId={}, ts={}, input={}]", [client_id, ts, input])	
+	}
 }
 
 
@@ -159,4 +180,32 @@ function ShootEvent(_shoot_id = 0, _pid = 0, _ts = 0, _dir = []) constructor
 		return string_interpolate("Player{} shoot at {} with direction {}", [pid, ts, dir])	
 	}
 	
+}
+
+function PlayerInfo(_pid = 0, _player_name="", _ping = 0) constructor 
+{
+	pid = _pid
+	player_name = _player_name
+	ping =_ping
+	
+	static Pack = function(_buf) {
+		// ID 
+		buffer_write(_buf, buffer_u8, pid)
+		// Name
+		buffer_write(_buf, buffer_string, player_name)
+		// ping
+		buffer_write(_buf, buffer_u16, ping)
+		
+	}
+	
+	static Unpack = function(_buf) {
+		pid = buffer_read(_buf, buffer_u8)
+		player_name = buffer_read(_buf, buffer_string)
+		ping = buffer_read(_buf, buffer_u16)
+			
+	}
+	
+	static MessageId = function() {
+		return network.players_info	
+	}
 }

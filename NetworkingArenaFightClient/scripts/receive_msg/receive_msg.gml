@@ -5,6 +5,9 @@ function receive_message(_buffer){
 		var msg_type = buffer_read(_buffer, buffer_u8)
 		var _seq_nb = buffer_read(_buffer, buffer_u16)
 		
+		// Store seq numbers from the server to send it back.
+		ackfield_push(ackfield, _seq_nb)
+		
 		if not net_seq_greater_than(_seq_nb, remote_seq_nb) {
 			log("Received packet out of order. Discarding")
 			return	
@@ -13,6 +16,7 @@ function receive_message(_buffer){
 		
 		switch msg_type {
 			
+			// When receive, the client is considered connected to the server
 			#region Connect Ack
 			case network.connect_ok:
 				player_id = buffer_read(_buffer, buffer_u8)
@@ -28,10 +32,11 @@ function receive_message(_buffer){
 				//}
 				
 				// Start heartbeats to not lose the connection
-				time_source_start(heartbeat_timesource)
+				//time_source_start(heartbeat_timesource)
 			break
 			#endregion
 			
+			// X - Y at given client ts
 			#region Update state for one player
 			case network.state:
 				// How many are connected?
@@ -72,6 +77,8 @@ function receive_message(_buffer){
 			break
 			#endregion
 			
+			// Somebody shot
+			#region Shoot event
 			case network.shoot_event:
 				var _ev = new ShootEvent()
 				_ev.Unpack(_buffer)
@@ -83,6 +90,39 @@ function receive_message(_buffer){
 				}
 				
 			break
-		}
+			#endregion
+			
+			// Names and pings of players
+			#region Player information 
+			case network.players_info:
+				var _info = new PlayerInfo()
+				_info.Unpack(_buffer)
+				
+				var found = false
+
+				for (var _i = 0; _i < array_length(players_information); _i++) {
+					if players_information[_i][0] == _info.pid {
+						players_information[_i][1] = _info.player_name
+						players_information[_i][2] = _info.ping
+						found = true
+						break	
+					}
+				}
+				
+				if not found {
+					array_push(players_information, [_info.pid, _info.player_name, _info.ping])
+				}
+				
+				with obj_par_player {
+					if _info.pid == net_entity_id {
+						player_name = _info.player_name	
+					}
+					
+				}
+				
+				log(string(players_information))
+			break
+			#endregion
+		}	
 	}
 }

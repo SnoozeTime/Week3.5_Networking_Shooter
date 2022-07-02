@@ -19,10 +19,13 @@ enum network {
 	player_shoot,
 	// other player shoot
 	shoot_event,
+	// Info about players (name, ping...)
+	players_info,
 }
 
 server_time = 0
 // Room speed is number of frames per second. /10 -> 100ms
+// currently 30 fps. need to send 10 packets per second.
 server_framerate = room_speed / 10
 
 cleanup_framerate = 30
@@ -46,12 +49,5 @@ all_clients = array_create(max_clients, new Client("", 0))
 
 alarm[0] = server_framerate
 alarm[1] = cleanup_framerate
+alarm[2] = room_speed
 
-next_entity_id = 0
-get_next_entity_id = function() {
-	next_entity_id = next_entity_id + 1
-	if next_entity_id == 65536 {
-		next_entity_id = 0	
-	}
-	return next_entity_id
-}

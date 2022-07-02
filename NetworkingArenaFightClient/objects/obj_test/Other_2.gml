@@ -10,8 +10,10 @@ if parameter_count() == 3 {
 		
 	window_set_position(window_get_x() - window_get_width() div 2 - 8, window_get_y())
 	window_set_caption("P1")
+	obj_control.init_player("P1")
 }
 if  parameter_count() == 4 {
 	 window_set_position(window_get_x() + window_get_width() div 2 + 8, window_get_y())
     window_set_caption("P2")
+	obj_control.init_player("P2")
 }

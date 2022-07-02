@@ -23,6 +23,7 @@ post_create = function(_net_entity_id, _x, _y) {
 	y = _y
 }
 
+last_remote_ts = 0
 
 ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 
@@ -56,6 +57,10 @@ ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 		}
 	} else {
 		
+		debug("Received state for player " + string(net_entity_id))
+		debug(string_interpolate("Will push at {} the state {}", [_ts, [_x, _y]]))
+		
+		last_remote_ts = _ts
 		/*
 			Entity interpolation.
 			Interpolate between previous received position and new received position so that movement is not choppy
@@ -70,6 +75,8 @@ ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 			current_interpolated_ts = first_ts
 			state_received += 1
 		}
+		
+		debug("buffer After " + string(rb))
 	}
 }
 

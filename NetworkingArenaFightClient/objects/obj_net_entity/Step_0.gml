@@ -32,8 +32,12 @@ if not is_local() {
 				look_at[1] = lerp( _initialState[3], _final_state[3], l)
 				
 			}
+		} else {
+			debug(string_interpolate("_rb_idx {} == buffer_end {}", [_rb_idx, rb]))	
 		}
 		
+	} else {
+		debug(string_interpolate("Cannot find state: {} and {}", [current_interpolated_ts, rb]))
 	}
 	
 	// Let's see if can find action.
@@ -44,7 +48,9 @@ if not is_local() {
 	}
 	
 	if state_received == 2 {
-		current_interpolated_ts += 1
+		
+		current_interpolated_ts += 1// min(last_remote_ts ,current_interpolated_ts + 1)
+		debug("new interpolated TS = " + string(current_interpolated_ts))
 	}
 	
 	after_remote_movement()

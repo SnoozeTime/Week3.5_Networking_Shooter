@@ -5,33 +5,39 @@ function net_pack_message(_msg) {
 		buffer_seek(send_buffer, buffer_seek_start, 0)
 		buffer_write(send_buffer, buffer_u8,_msg.MessageId()) // message type
 		buffer_write(send_buffer, buffer_u16, local_seq_nb) // seq number from server side.
+		// acks.
+		buffer_write(send_buffer, buffer_u16, remote_seq_nb)
+		// ack bitfield
+		buffer_write(send_buffer, buffer_u32, ackfield_tou32(ackfield, remote_seq_nb))
+		
 		_msg.Pack(send_buffer)
 		local_seq_nb= (local_seq_nb+1) %  65535
 	}
 }
 
+
+
 /**
 	Send a connection request to the server. Server returns a random ID
 */
-function connect_to_server(){
-	var _msg = new Connect()
+function connect_to_server(_name){
+	var _msg = new Connect(_name)
 	send_to_server(_msg)
 }
 
-function Connect() constructor
+function Connect(_player_name="") constructor 
 {
-	
+	player_name = _player_name	
 	static Pack = function(_buf) {
-		//buffer_write(_buf, buffer_u8, client_id)
+		buffer_write(_buf, buffer_string, player_name)
+	}
+	
+	static Unpack = function(_buf) {
+		player_name = buffer_read(_buf, buffer_string)
 	}
 	
 	static MessageId = function() {
 		return network.connect	
-	}
-	
-	// Size if one u8
-	static Size = function() {
-		return 0	
 	}
 }
 
@@ -143,5 +149,35 @@ function ShootEvent(_shoot_id = 0, _pid = 0, _ts = 0, _dir = []) constructor
 	
 	static ToString = function() {
 		return "Player" + string(pid) + "Shoot at dir=" + string(dir) + " and ts=" + string(ts)
+	}
+}
+
+
+
+function PlayerInfo(_pid = 0, _player_name="", _ping = 0) constructor 
+{
+	pid = _pid
+	player_name = _player_name
+	ping =_ping
+	
+	static Pack = function(_buf) {
+		// ID 
+		buffer_write(_buf, buffer_u8, pid)
+		// Name
+		buffer_write(_buf, buffer_string, player_name)
+		// ping
+		buffer_write(_buf, buffer_u16, ping)
+		
+	}
+	
+	static Unpack = function(_buf) {
+		pid = buffer_read(_buf, buffer_u8)
+		player_name = buffer_read(_buf, buffer_string)
+		ping = buffer_read(_buf, buffer_u16)
+			
+	}
+	
+	static MessageId = function() {
+		return network.players_info	
 	}
 }

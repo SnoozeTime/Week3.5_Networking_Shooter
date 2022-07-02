@@ -5,14 +5,29 @@ function received_packet(_ip_addr, _port, _buffer){
 		var msg_type = buffer_read(_buffer, buffer_u8)
 		// remote seq number
 		var _sq_nb = buffer_read(_buffer, buffer_u16)
-		var _msg_client_id = net_find_player(_ip_addr, _port) 
+		var _msg_client_id = net_find_player(_ip_addr, _port)
+		var _ack = buffer_read(_buffer, buffer_u16)
+		var _ack_bitfield = buffer_read(_buffer, buffer_u32)
 		
+		//159.223.52.17
+		
+		if _msg_client_id == 1 {
+			log("Received packet from client 1=" + string(msg_type))	
+		}
+		
+
 		// Validate packet (Checksum later, seq nb)
 		if _msg_client_id >= 0 {
 			if not net_seq_greater_than(_sq_nb, all_clients[_msg_client_id].remote_seq_nb) {
 				log("ERROR - Packet out of order")
+				return
 			}
 			all_clients[_msg_client_id].remote_seq_nb = _sq_nb
+			
+			// Ack
+			with all_clients[_msg_client_id] {
+				rtt = ack_check(rtt, acks, _ack, ackfield_fromu32(_ack, _ack_bitfield))
+			}
 		}
 
 		switch msg_type {
@@ -40,15 +55,20 @@ function received_packet(_ip_addr, _port, _buffer){
 						return
 					}
 					
+					var _connectInfo = new Connect()
+					_connectInfo.Unpack(_buffer)
 					// Then, if not connected, create a new client and connect it.
 					var _newClient = new Client(_ip_addr, _port)
 					_newClient.connected = true
 					_newClient.client_id = _msg_client_id
+					_newClient.pname = _connectInfo.player_name
 					
 					// Need to spawn the actual player
 					var instance = instance_create_layer(200, 200, "Instances", obj_player)
 					instance.player_id = _msg_client_id
 					_newClient.player_instance = instance
+					
+					log(string_interpolate("New Connection: PID={}, name={}", [_msg_client_id, _newClient.pname]))
 				
 					all_clients[_msg_client_id] = _newClient
 				}
@@ -63,9 +83,6 @@ function received_packet(_ip_addr, _port, _buffer){
 			case network.heartbeat:
 				var _heartbeat = new Heartbeat()
 				_heartbeat.Unpack(_buffer)
-				if _heartbeat.client_id >= 0 and _heartbeat.client_id < max_clients {
-					log("Valid heartbeat from " + string(_heartbeat.client_id))	
-				}
 			break
 			
 			#endregion
@@ -76,6 +93,10 @@ function received_packet(_ip_addr, _port, _buffer){
 			
 				var _input_msg = new Input()
 				_input_msg.Unpack(_buffer)
+				
+				if _msg_client_id == 1 {
+					log("Input from client 1=" + _input_msg.ToString())	
+				}
 				
 				if _input_msg.client_id != _msg_client_id {
 					log("ERROR - Client tried to send input for wrong pid")	
@@ -128,6 +149,8 @@ function send_connect_ok(_client) {
 function send_to(_client, _msg) {
 	with obj_server {
 		if _client.IsValid() {
+			// Save the ack for later.
+			ds_map_add(_client.acks, _client.local_seq_nb, get_timer()/1000)
 			net_pack_message(server_buffer, _msg, _client)
 			network_send_udp(server_socket, _client.addr, _client.port, server_buffer, buffer_tell(server_buffer))	
 		}
@@ -139,10 +162,7 @@ function send_all(_msg) {
 	with obj_server {
 		for (var _i=0; _i < max_clients; _i++) {
 			var _c = all_clients[_i]
-			if _c.IsValid() {
-				net_pack_message(server_buffer, _msg, _c)
-				network_send_udp(server_socket, _c.addr, _c.port, server_buffer, buffer_tell(server_buffer))	
-			}
+			send_to(_c, _msg)
 		}
 	}
 }
@@ -154,11 +174,7 @@ function send_all_but(_msg, _pid) {
 				continue
 			}
 			var _c = all_clients[_i]
-			if _c.IsValid() {
-				net_pack_message(server_buffer, _msg, _c)
-				log(buffer_prettyprint(server_buffer))
-				network_send_udp(server_socket, _c.addr, _c.port, server_buffer, buffer_tell(server_buffer))	
-			}
+			send_to(_c, _msg)
 		}
 	}
 }
@@ -171,8 +187,19 @@ function send_state(_player) {
 	
 }
 
+function send_player_info() {
+	with obj_server {
+		for (var _i=0; _i < max_clients; _i++) {
+			var _c = all_clients[_i]
+			if _c.IsValid() {
+				var _msg = new PlayerInfo(_i, _c.pname, _c.rtt)
+				send_all(_msg)
+			}
+		}
+	}
+}
+
 function send_shoot_event(_player, _shoot_at, _shot_dir) {
-	log("Will send shoot event")
 	with obj_server {
 		var _msg = new ShootEvent(0, _player.player_id, _shoot_at, _shot_dir)
 		send_all_but(_msg, _player.player_id)
@@ -183,13 +210,25 @@ function Client(_addr, _port) constructor
 {
     addr = _addr
 	port = _port
+	pname = ""
 	connected = false
 	last_server_time = 0
 	client_id = -1
 	player_instance = noone
-	local_seq_nb = 0
+	local_seq_nb = 1
 	remote_seq_nb = 0
 	
+	rtt = 0
+	acks = ds_map_create()
+
+	static CleanUp = function() {
+		ds_map_destroy(acks)
+		if player_instance != noone {
+			instance_destroy(player_instance)
+			player_instance = noone
+		}
+	}
+
 	static IsValid = function()
     {
         return connected

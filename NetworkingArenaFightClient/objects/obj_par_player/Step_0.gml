@@ -1,6 +1,6 @@
 /// @description Movement
 event_inherited()
-
+log(string_interpolate("Start of frame={}", [current_time]))
 /* Player movement; If local player, then send the state to the server
    and move to where the player is supposed to be. It is in "current time"
    Server will then send the real state and the correction can be done.
@@ -21,6 +21,7 @@ if is_local() {
 	state[4] = mouse_check_button(mb_left)
 
 	send_input(player_ts, state)
+	log(string_interpolate("{}: Send input to server at {} = {}", [current_time, player_ts, state]))
 	
 	// Apply movement
 	// -----------------------------

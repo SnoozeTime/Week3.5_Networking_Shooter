@@ -27,6 +27,7 @@ prev_y = y
 
 state_received = 0
 debug_txt = ""
+player_name = ""
 
 // Detect whether mouse is clicked or not. Instead of using built-in mouse_check_pressed
 // It's easier to transfer mouse state rather than even since the server need to receive it 

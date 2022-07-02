@@ -19,6 +19,8 @@ enum network {
 	player_shoot,
 	// other player shoot
 	shoot_event,
+	// Info about players (name, ping...)
+	players_info,
 }
 
 
@@ -33,17 +35,18 @@ enum ClientState {
 myState = ClientState.not_connected
 player_id = -2
 
-port = 64198
-server_addr = "127.0.0.1"
+port = global.server_port //64198
+server_addr = global.server_ip //"127.0.0.1"
 client_socket = network_create_socket(network_socket_udp)
 send_buffer = buffer_create(1024, buffer_fixed, 1)
 
 local_seq_nb = 0
 remote_seq_nb = -1
+ackfield = ackfield_create()
 
 // Handling the connection
 var _connect_to_server = function() {
-	connect_to_server()	
+	connect_to_server(global.player_name)	
 }
 connect_timesource = time_source_create(time_source_game, 1, time_source_units_seconds, _connect_to_server, [], -1, time_source_expire_after)
 
@@ -53,3 +56,13 @@ var _send_heartbeat = function() {
 }
 heartbeat_period = 0.5
 heartbeat_timesource = time_source_create(time_source_game, heartbeat_period, time_source_units_seconds, _send_heartbeat, [], -1, time_source_expire_after)
+
+// Names and pings
+players_information = []
+
+// STAAAART
+if myState == ClientState.not_connected {
+	myState = ClientState.connecting
+	log("Will connect to server")
+	time_source_start(connect_timesource)
+}
