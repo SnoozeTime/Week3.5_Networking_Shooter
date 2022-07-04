@@ -181,3 +181,56 @@ function PlayerInfo(_pid = 0, _player_name="", _ping = 0) constructor
 		return network.players_info	
 	}
 }
+
+
+/**
+	Client state.
+**/
+function ClientState(_player=noone) constructor {
+	
+	if _player != noone {
+		client_id = _player.player_id // u8
+		ts = _player.last_client_time // u32
+		pos_x = _player.x // u16
+		pos_y = _player.y// u16
+		hp = _player.hp
+		mouse_dir = _player.mouse_dir
+	} else {
+		client_id = -1
+		ts = 0
+		pos_x = 0
+		pos_y = 0
+		hp = 0
+		mouse_dir = []
+	}
+	
+	static MessageId = function() {
+		return network.state	
+	}
+	
+	static Size = function() {
+		return 10	
+	}
+	
+	static Unpack = function(_buf) {
+		client_id = buffer_read(_buf, buffer_u8)
+		ts = buffer_read(_buf, buffer_u32)
+		pos_x = buffer_read(_buf, buffer_u16)	
+		pos_y = buffer_read(_buf, buffer_u16)
+		var mouse_dir_x = buffer_read(_buf, buffer_u16)
+		var mouse_dir_y = buffer_read(_buf, buffer_u16)
+		mouse_dir = [mouse_dir_x, mouse_dir_y]
+		hp = buffer_read(_buf, buffer_u8)
+	}
+	
+	
+	static Pack = function(_buf) {
+		buffer_write(_buf, buffer_u8, client_id)
+		buffer_write(_buf, buffer_u32, ts)
+		buffer_write(_buf, buffer_u16,  pos_x)
+		buffer_write(_buf, buffer_u16,  pos_y)
+		buffer_write(_buf, buffer_u16, mouse_dir[0])
+		buffer_write(_buf, buffer_u16, mouse_dir[1])
+		buffer_write(_buf, buffer_u8, hp)
+	}
+}

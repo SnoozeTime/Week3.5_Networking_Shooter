@@ -2,8 +2,16 @@
 
 player_id = -1
 
+
+enum player_state {
+	alive,
+	dead,
+}
+my_state = player_state.alive
+
 all_inputs = ds_list_create()
 
+hp = 5
 last_client_time = 0
 input = [0,0,0,0]
 mouse_dir = [1, 0]
@@ -20,7 +28,22 @@ reset_input = function() {
 	ds_list_clear(all_inputs)
 }
 
+damage = function(_dmg) {
+	hp -= _dmg
+	if hp == 0 {
+		// dead
+		my_state = player_state.dead
+		// Add itself to spawn queue.
+		with obj_spawner {
+			add_player_to_spawn(other.player_id, 3)	
+		}
+	}
+}
 
+respawn = function() {
+	hp = 5
+	my_state = player_state.alive
+}
 player_step = function() {
 	
 	var _has_shot = false
@@ -32,44 +55,44 @@ player_step = function() {
 		for (var _i = 0; _i < ds_list_size(all_inputs); _i++) {
 			var _fromClient = ds_list_find_value(all_inputs, _i)
 		    _input = _fromClient[1]	
-			x += vel*(_input[1] - _input[0])
-			y += vel*(_input[3] - _input[2])
-			mouse_dir = [_input[5], _input[6]]
 			
-			// Check whether we need to shoot.
-			if prev_mouse_state != _input[4] {
-				is_mouse_clicked = _input[4] == 1		
-				is_mouse_released = _input[4] == 0		
-			} else {
-				is_mouse_clicked = false	
-				is_mouse_released = false	
-			}
+			if my_state == player_state.alive {
+				x += vel*(_input[1] - _input[0])
+				y += vel*(_input[3] - _input[2])
+				mouse_dir = [_input[5], _input[6]]
+			
+				// Check whether we need to shoot.
+				if prev_mouse_state != _input[4] {
+					is_mouse_clicked = _input[4] == 1		
+					is_mouse_released = _input[4] == 0		
+				} else {
+					is_mouse_clicked = false	
+					is_mouse_released = false	
+				}
 	
-			prev_mouse_state = _input[4]
+				prev_mouse_state = _input[4]
 			
-			if player_id == 1 {
-				log(string_interpolate("Apply input at  {} (last ts ={})", [_fromClient[0], last_client_time]))
-			}
-			
-			// Cannot shoot too fast.
-			if is_mouse_clicked and not _has_shot {
-				var _x = mouse_dir[0] - x
-				var _y = mouse_dir[1] - (y-8)
-				var b = instance_create_depth(x, y, layer, obj_par_projectile, { dir_x: _x, dir_y: _y } )
-				b.my_parent = self
-				_shot_dir = b.dir
-				_shoot_at = _fromClient[0]	
-				// at what time?
-				_has_shot = true
-			}
+				// Cannot shoot too fast.
+				if is_mouse_clicked and not _has_shot {
+					var _x = mouse_dir[0] - x
+					var _y = mouse_dir[1] - (y-8)
+					var b = instance_create_depth(x, y, layer, obj_par_projectile, { dir_x: _x, dir_y: _y } )
+					b.my_parent = self
+					_shot_dir = b.dir
+					_shoot_at = _fromClient[0]	
+					// at what time?
+					_has_shot = true
+				}
 			
 			
-			// bullet collision
+				// bullet collision
 			
-			// Check if collision with projectile.
-			with obj_par_projectile {
-				if place_meeting(x, y, other) and my_parent != other  {
-					instance_destroy()	
+				// Check if collision with projectile.
+				with obj_par_projectile {
+					if place_meeting(x, y, other) and my_parent != other  {
+						instance_destroy()	
+						other.damage(1)
+					}
 				}
 			}
 		}

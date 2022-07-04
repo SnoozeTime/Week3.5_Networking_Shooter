@@ -42,30 +42,28 @@ function receive_message(_buffer){
 			// X - Y at given client ts
 			#region Update state for one player
 			case network.state:
-				// How many are connected?
-				var _pid = buffer_read(_buffer, buffer_u8)
-				var _ts = buffer_read(_buffer, buffer_u32)
-				var _x = buffer_read(_buffer, buffer_u16)	
-				var _y = buffer_read(_buffer, buffer_u16)
-				var mouse_dir_x = buffer_read(_buffer, buffer_u16)
-				var mouse_dir_y = buffer_read(_buffer, buffer_u16)
+				var _state = new ClientState()
+				_state.Unpack(_buffer)
 				
-				if _pid >= 0 {
+				if _state.client_id >= 0 {
 					var _found = false
 						
 					// Update x and y
 					// TODO create map or array later
 					with obj_par_player {
-						if net_entity_id == _pid {
-							ApplyServerPos(_ts, _x, _y, mouse_dir_x, mouse_dir_y)
+						if net_entity_id == _state.client_id {
+							ApplyServerPos(_state.ts, _state.pos_x, _state.pos_y, _state.mouse_dir[0], _state.mouse_dir[1])
 							_found = true
+							update_health(_state.hp)
 						}
+						
 					}
 						
 					if not _found {
 						var p = instance_create_layer(200, 200, "Instances", obj_firehead)
 						with p {
-							post_create(_pid, _x, _y)
+							post_create(_state.client_id, _state.pos_x, _state.pos_y)
+							hp = _state.hp
 						}
 						if p.is_local() {
 							with obj_camera {

@@ -55,6 +55,7 @@ function ClientState(_player) constructor {
 	ts = _player.last_client_time // u32
 	pos_x = _player.x // u16
 	pos_y = _player.y// u16
+	hp = _player.hp
 	mouse_dir = _player.mouse_dir
 	
 	static MessageId = function() {
@@ -62,7 +63,7 @@ function ClientState(_player) constructor {
 	}
 	
 	static Size = function() {
-		return 9	
+		return 10	
 	}
 	
 	static Pack = function(_buf) {
@@ -72,6 +73,7 @@ function ClientState(_player) constructor {
 		buffer_write(_buf, buffer_u16,  pos_y)
 		buffer_write(_buf, buffer_u16, mouse_dir[0])
 		buffer_write(_buf, buffer_u16, mouse_dir[1])
+		buffer_write(_buf, buffer_u8, hp)
 	}
 }
 

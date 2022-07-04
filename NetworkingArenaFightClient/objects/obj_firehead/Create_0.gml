@@ -40,3 +40,11 @@ primary_action = function(_x, _y) {
 		init(other.net_entity_id)
 	}
 }
+
+on_death = function() {
+	my_fireball.visible = false	
+}
+
+on_respawn = function() {
+	my_fireball.visible = true
+}
