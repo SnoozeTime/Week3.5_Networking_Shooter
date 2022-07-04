@@ -56,10 +56,6 @@ ApplyServerPos = function(_ts, _x, _y, _mouse_x, _mouse_y) {
 			}
 		}
 	} else {
-		
-		debug("Received state for player " + string(net_entity_id))
-		debug(string_interpolate("Will push at {} the state {}", [_ts, [_x, _y]]))
-		
 		last_remote_ts = _ts
 		/*
 			Entity interpolation.
