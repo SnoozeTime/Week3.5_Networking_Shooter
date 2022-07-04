@@ -57,8 +57,17 @@ player_step = function() {
 		    _input = _fromClient[1]	
 			
 			if my_state == player_state.alive {
-				x += vel*(_input[1] - _input[0])
-				y += vel*(_input[3] - _input[2])
+				
+				
+				var _dx = vel*(_input[1] - _input[0])
+				var _dy = vel*(_input[3] - _input[2])
+				
+				if !place_meeting(x+_dx, y, obj_collider) {	
+					x += _dx
+				}
+				if !place_meeting(x, y+_dy, obj_collider) {		
+					y += _dy
+				}
 				mouse_dir = [_input[5], _input[6]]
 			
 				// Check whether we need to shoot.

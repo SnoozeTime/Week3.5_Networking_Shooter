@@ -1,5 +1,8 @@
 /// @description Movement
 event_inherited()
+
+depth = -y
+
 /* Player movement; If local player, then send the state to the server
    and move to where the player is supposed to be. It is in "current time"
    Server will then send the real state and the correction can be done.
@@ -33,8 +36,16 @@ if is_local() {
 	// -----------------------------
 	
 	// Then movement from input
-	x += vel*(state[1] - state[0])
-	y += vel*(state[3] - state[2])
+	apply_simulation(state)
+	//var _dx = vel*(state[1] - state[0])
+	//var _dy = vel*(state[3] - state[2])
+				
+	//if !place_meeting(x+_dx, y, obj_par_collision) {	
+	//	x += _dx
+	//}
+	//if !place_meeting(x, y+_dy, obj_par_collision) {		
+	//	y += _dy
+	//}
 
 	// Add to state buffer
 	var _input_copy = array_create(array_length(state))

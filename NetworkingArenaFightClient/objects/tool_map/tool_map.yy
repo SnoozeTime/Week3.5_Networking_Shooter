@@ -1,17 +1,11 @@
 {
-  "spriteId": {
-    "name": "spr_fence",
-    "path": "sprites/spr_fence/spr_fence.yy",
-  },
+  "spriteId": null,
   "solid": false,
-  "visible": true,
+  "visible": false,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": {
-    "name": "obj_par_collision",
-    "path": "objects/obj_par_collision/obj_par_collision.yy",
-  },
+  "parentObjectId": null,
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -24,15 +18,17 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":113,"eventType":9,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "city",
-    "path": "folders/Objects/BackgroundItems/city.yy",
+    "name": "Tools",
+    "path": "folders/Objects/Tools.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_fence",
+  "name": "tool_map",
   "tags": [],
   "resourceType": "GMObject",
 }

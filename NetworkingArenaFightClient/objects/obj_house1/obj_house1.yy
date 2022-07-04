@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_fence",
-    "path": "sprites/spr_fence/spr_fence.yy",
+    "name": "spr_house1",
+    "path": "sprites/spr_house1/spr_house1.yy",
   },
   "solid": false,
   "visible": true,
@@ -32,7 +32,7 @@
     "path": "folders/Objects/BackgroundItems/city.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_fence",
+  "name": "obj_house1",
   "tags": [],
   "resourceType": "GMObject",
 }

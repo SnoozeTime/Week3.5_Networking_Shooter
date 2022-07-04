@@ -14,7 +14,3 @@ init = function(parent_id) {
 	log("Initialize")	
 	my_parent = parent_id
 }
-
-print = function() {
-	log("projectile shot by " + string(my_parent))
-}

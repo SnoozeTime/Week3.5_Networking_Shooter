@@ -39,8 +39,15 @@ is_mouse_released = false
 prev_mouse_state = 0
 
 apply_simulation = function(_input) {
-	x += vel*(_input[1] - _input[0])
-	y += vel*(_input[3] - _input[2])
+	var _dx = vel*(_input[1] - _input[0])
+	var _dy = vel*(_input[3] - _input[2])
+				
+	if !place_meeting(x+_dx, y, obj_par_collision) {	
+		x += _dx
+	}
+	if !place_meeting(x, y+_dy, obj_par_collision) {		
+		y += _dy
+	}
 }
 
 update_health = function(_hp) {
@@ -52,9 +59,7 @@ update_health = function(_hp) {
 	}
 	
 	// RESPAWN
-	log(string_interpolate("{} and {} > 0 = {} and {} = {}", [my_state, hp, my_state == player_state.dead, hp > 0,my_state == player_state.dead and hp > 0]))
 	if my_state == player_state.dead and hp > 0 {
-		log("RESPAWNING")
 		visible = true	
 		my_state = player_state.idle
 		on_respawn()

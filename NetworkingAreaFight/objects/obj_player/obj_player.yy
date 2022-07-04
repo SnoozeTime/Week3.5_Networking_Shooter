@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "spr_white",
-    "path": "sprites/spr_white/spr_white.yy",
+    "name": "spr_firehead_idle",
+    "path": "sprites/spr_firehead_idle/spr_firehead_idle.yy",
   },
   "solid": false,
   "visible": true,

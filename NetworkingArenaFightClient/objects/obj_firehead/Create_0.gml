@@ -35,7 +35,7 @@ on_click = function() {
 
 
 primary_action = function(_x, _y) {
-	var _bullet = instance_create_layer(my_fireball.x, my_fireball.y, layer, obj_fireball, {dir_x: _x, dir_y: _y})
+	var _bullet = instance_create_layer(my_fireball.x, my_fireball.y, "Instances", obj_fireball, {dir_x: _x, dir_y: _y})
 	with _bullet {
 		init(other.net_entity_id)
 	}

@@ -1,17 +1,14 @@
 {
   "spriteId": {
-    "name": "spr_fence",
-    "path": "sprites/spr_fence/spr_fence.yy",
+    "name": "spr_collision_pixel",
+    "path": "sprites/spr_collision_pixel/spr_collision_pixel.yy",
   },
   "solid": false,
   "visible": true,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": {
-    "name": "obj_par_collision",
-    "path": "objects/obj_par_collision/obj_par_collision.yy",
-  },
+  "parentObjectId": null,
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -28,11 +25,11 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "city",
-    "path": "folders/Objects/BackgroundItems/city.yy",
+    "name": "maps",
+    "path": "folders/Objects/maps.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_fence",
+  "name": "obj_collider",
   "tags": [],
   "resourceType": "GMObject",
 }
