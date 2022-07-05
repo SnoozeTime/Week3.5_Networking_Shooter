@@ -58,7 +58,7 @@ time_source_start(before_connect_ts)
 
 // Handling the connection
 var _connect_to_server = function() {
-	connect_to_server(global.player_name)	
+	connect_to_server(global.player_name, global.hero_type)	
 }
 connect_timesource = time_source_create(time_source_game, 1, time_source_units_seconds, _connect_to_server, [], -1, time_source_expire_after)
 

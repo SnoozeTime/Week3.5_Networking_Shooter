@@ -3,10 +3,7 @@
 player_id = -1
 
 
-enum player_state {
-	alive,
-	dead,
-}
+
 my_state = player_state.alive
 
 all_inputs = ds_list_create()
@@ -44,6 +41,10 @@ respawn = function() {
 	hp = 5
 	my_state = player_state.alive
 }
+
+// Should return noone, or a message to send.
+primary_skill = function() {}
+
 player_step = function() {
 	
 	var _has_shot = false
@@ -83,6 +84,7 @@ player_step = function() {
 			
 				// Cannot shoot too fast.
 				if is_mouse_clicked and not _has_shot {
+					primary_skill()
 					var _x = mouse_dir[0] - x
 					var _y = mouse_dir[1] - (y-8)
 					var b = instance_create_depth(x, y, layer, obj_par_projectile, { dir_x: _x, dir_y: _y } )
@@ -110,11 +112,6 @@ player_step = function() {
 	}
 
 	reset_input()
-
-	// Send position to client
-	if player_id == 1 {
-		log(string_interpolate("Will send state at {}", [last_client_time]))
-	}
 	
 	send_state(self)
 	

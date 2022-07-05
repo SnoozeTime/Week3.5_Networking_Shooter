@@ -27,15 +27,7 @@ function receive_message(_buffer){
 					my_state = HudState.Playing	
 				}
 				log("Connected to server with player ID " + string(player_id))
-				
-				// Create the player.
-				//var p = instance_create_layer(200, 200, "Instances", obj_player)
-				//with p {
-				//	player_id = other.player_id	
-				//}
-				
-				// Start heartbeats to not lose the connection
-				//time_source_start(heartbeat_timesource)
+
 			break
 			#endregion
 			
@@ -60,7 +52,7 @@ function receive_message(_buffer){
 					}
 						
 					if not _found {
-						var p = instance_create_layer(200, 200, "Instances", obj_firehead)
+						var p = instance_create_layer(200, 200, "Instances", obj_invisible_hero)
 						with p {
 							post_create(_state.client_id, _state.pos_x, _state.pos_y)
 							hp = _state.hp

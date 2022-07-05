@@ -9,15 +9,18 @@ function net_pack_message(_buf, _msg, _client) {
 }
 
 
-function Connect(_player_name="") constructor 
+function Connect(_player_name="", _hero_type=0) constructor 
 {
-	player_name = _player_name	
+	player_name = _player_name
+	hero_type = _hero_type
 	static Pack = function(_buf) {
 		buffer_write(_buf, buffer_string, player_name)
+		buffer_write(_buf, buffer_u8, hero_type)
 	}
 	
 	static Unpack = function(_buf) {
 		player_name = buffer_read(_buf, buffer_string)
+		hero_type = buffer_read(_buf, buffer_u8)
 	}
 	
 	static MessageId = function() {
@@ -131,9 +134,10 @@ function Input(_client_id=0, _ts=0, _input=noone, _look_at = noone) constructor
 		var _top = (_input_bits & (1 << 2)) != 0
 		var _bottom =  (_input_bits & (1 << 3)) != 0
 		var _mouse_left =  (_input_bits & (1 << 4)) != 0
+		var _mouse_right =  (_input_bits & (1 << 5)) != 0
 		var _mouse_x = buffer_read(_buf, buffer_u16)
 		var _mouse_y = buffer_read(_buf, buffer_u16)
-		input = [_left, _right, _top, _bottom, _mouse_left, _mouse_x, _mouse_y]
+		input = [_left, _right, _top, _bottom, _mouse_left, _mouse_right, _mouse_x, _mouse_y]
 	}
 	
 	static MessageId = function() {

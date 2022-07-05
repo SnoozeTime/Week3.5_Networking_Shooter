@@ -22,30 +22,22 @@ if is_local() {
 		state[2] = keyboard_check(vk_up)
 		state[3] = keyboard_check(vk_down)
 		state[4] = mouse_check_button(mb_left)
+		state[5] = mouse_check_button(mb_right)
 	} else {
 		state[0] = 0
 		state[1] = 0
 		state[2] = 0
 		state[3] = 0
 		state[4] = 0
+		state[5] = 0
 	}
 
 	send_input(player_ts, state)
 
 	// Apply movement
 	// -----------------------------
-	
 	// Then movement from input
 	apply_simulation(state)
-	//var _dx = vel*(state[1] - state[0])
-	//var _dy = vel*(state[3] - state[2])
-				
-	//if !place_meeting(x+_dx, y, obj_par_collision) {	
-	//	x += _dx
-	//}
-	//if !place_meeting(x, y+_dy, obj_par_collision) {		
-	//	y += _dy
-	//}
 
 	// Add to state buffer
 	var _input_copy = array_create(array_length(state))
@@ -72,6 +64,20 @@ if is_local() {
 	
 	if is_mouse_clicked and my_state != player_state.dead {
 		on_click()
+	}
+	
+	if sec_prev_mouse_state != state[5] {
+		is_sec_mouse_clicked = state[5] == 1		
+		is_sec_mouse_released = state[5] == 0		
+	} else {
+		is_sec_mouse_clicked = false	
+		is_sec_mouse_released = false	
+	}
+	
+	sec_prev_mouse_state = state[5]
+	
+	if is_sec_mouse_clicked and my_state != player_state.dead {
+		on_secondary_skill()
 	}
 }
 

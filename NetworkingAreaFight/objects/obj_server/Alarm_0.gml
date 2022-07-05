@@ -1,6 +1,6 @@
 /// @description Server Step
 
-with obj_player {
+with obj_par_player {
 	player_step()	
 }
 

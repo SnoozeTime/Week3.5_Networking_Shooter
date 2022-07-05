@@ -20,20 +20,23 @@ function net_pack_message(_msg) {
 /**
 	Send a connection request to the server. Server returns a random ID
 */
-function connect_to_server(_name){
+function connect_to_server(_name, _hero_type){
 	var _msg = new Connect(_name)
 	send_to_server(_msg)
 }
 
-function Connect(_player_name="") constructor 
+function Connect(_player_name="", _hero_type=0) constructor 
 {
-	player_name = _player_name	
+	player_name = _player_name
+	hero_type = _hero_type
 	static Pack = function(_buf) {
 		buffer_write(_buf, buffer_string, player_name)
+		buffer_write(_buf, buffer_u8, hero_type)
 	}
 	
 	static Unpack = function(_buf) {
 		player_name = buffer_read(_buf, buffer_string)
+		hero_type = buffer_read(_buf, buffer_u8)
 	}
 	
 	static MessageId = function() {
@@ -59,13 +62,6 @@ function Heartbeat(_client_id) constructor
 	// Size if one u8
 	static Size = function() {
 		return 1	
-	}
-}
-
-function send_heartbeat() {
-	with obj_client {
-		var _msg = new Heartbeat(player_id)
-		send_to_server(_msg)
 	}
 }
 

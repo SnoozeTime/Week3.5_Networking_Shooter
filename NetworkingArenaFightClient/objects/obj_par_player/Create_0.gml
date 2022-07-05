@@ -21,6 +21,8 @@ state[2] = 0
 state[3] = 0
 // Click left button
 state[4] = 0
+// right click
+state[5] = 0
 
 hp = 5
 
@@ -37,6 +39,11 @@ player_name = ""
 is_mouse_clicked = false
 is_mouse_released = false
 prev_mouse_state = 0
+
+// Right click :D
+is_sec_mouse_clicked = false
+is_sec_mouse_released = false
+sec_prev_mouse_state = 0
 
 apply_simulation = function(_input) {
 	var _dx = vel*(_input[1] - _input[0])
@@ -65,7 +72,12 @@ update_health = function(_hp) {
 		on_respawn()
 	}
 }
+
 // CALLBACKS
 on_click = function() {}
+on_secondary_skill = function() {}
 on_respawn = function() {}
 on_death = function() {}
+custom_draw = function() {
+	draw_self()	
+}

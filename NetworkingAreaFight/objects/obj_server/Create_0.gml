@@ -23,6 +23,12 @@ enum network {
 	players_info,
 }
 
+// Serialized to u8
+enum Hero {
+	Firehead,
+	InvisibleSam, // as in samurai !
+}
+
 server_time = 0
 // Room speed is number of frames per second. /10 -> 100ms
 // currently 30 fps. need to send 10 packets per second.

@@ -64,7 +64,7 @@ function received_packet(_ip_addr, _port, _buffer){
 					_newClient.pname = _connectInfo.player_name
 					
 					// Need to spawn the actual player
-					var instance = instance_create_layer(200, 200, "Instances", obj_player)
+					var instance = instance_create_layer(200, 200, "Instances", obj_firehead)
 					instance.player_id = _msg_client_id
 					_newClient.player_instance = instance
 					
