@@ -28,7 +28,9 @@
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
-  "overriddenProperties": [],
+  "overriddenProperties": [
+    {"propertyId":{"name":"hero_type","path":"objects/obj_par_player/obj_par_player.yy",},"objectId":{"name":"obj_par_player","path":"objects/obj_par_player/obj_par_player.yy",},"value":"Hero.Firehead","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+  ],
   "parent": {
     "name": "character",
     "path": "folders/Objects/character.yy",

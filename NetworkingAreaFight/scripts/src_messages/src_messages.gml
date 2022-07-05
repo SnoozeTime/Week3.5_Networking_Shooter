@@ -55,6 +55,7 @@ function ConnectOk(_client_id) constructor
 function ClientState(_player) constructor {
 	
 	client_id = _player.player_id // u8
+	hero_type = _player.hero_type
 	ts = _player.last_client_time // u32
 	pos_x = _player.x // u16
 	pos_y = _player.y// u16
@@ -71,6 +72,7 @@ function ClientState(_player) constructor {
 	
 	static Pack = function(_buf) {
 		buffer_write(_buf, buffer_u8, client_id)
+		buffer_write(_buf, buffer_u8, hero_type)
 		buffer_write(_buf, buffer_u32, ts)
 		buffer_write(_buf, buffer_u16,  pos_x)
 		buffer_write(_buf, buffer_u16,  pos_y)

@@ -52,7 +52,17 @@ function receive_message(_buffer){
 					}
 						
 					if not _found {
-						var p = instance_create_layer(200, 200, "Instances", obj_invisible_hero)
+						
+						var p
+						switch _state.hero_type {
+							case Hero.Firehead:
+								p = instance_create_layer(200, 200, "Instances", obj_firehead)
+							break
+							case Hero.InvisibleSam:
+								p = instance_create_layer(200, 200, "Instances", obj_invisible_hero)
+							break
+						}
+						
 						with p {
 							post_create(_state.client_id, _state.pos_x, _state.pos_y)
 							hp = _state.hp

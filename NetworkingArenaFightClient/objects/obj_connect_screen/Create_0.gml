@@ -31,6 +31,8 @@ for (var _i=0; _i < array_length(box_data); _i++) {
 }
 
 // Then add the button
+
+
 connect_to_server = function() {
 	if boxes[0].text == "" {
 		error_label.label = "Missing name"
@@ -49,9 +51,29 @@ connect_to_server = function() {
 		room_goto_next()
 	}	
 }
+
+
+connect_firehead = function() {
+	global.hero_type = Hero.Firehead
+	self.connect_to_server()	
+}
+
+connect_invisiblesam = function() {
+	global.hero_type = Hero.InvisibleSam
+	self.connect_to_server()	
+}
+
+
 connect_button = instance_create_layer(left+10, top+array_length(box_data) * (y_separation+textbox_height), layer, obj_button)
 with connect_button {
-	on_click = other.connect_to_server
+	text = "Firehead"
+	on_click = other.connect_firehead
+}
+
+connect_button2 = instance_create_layer(left+110, top+array_length(box_data) * (y_separation+textbox_height), layer, obj_button)
+with connect_button2 {
+	text = "InvisibleSam"
+	on_click = other.connect_invisiblesam
 }
 
 // label if error
